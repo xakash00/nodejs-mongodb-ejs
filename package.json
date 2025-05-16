@@ -6,9 +6,14 @@
     "clean": "rm -rf coverage dist",
     "lint": "eslint ./src/*.ts",
     "test": "jest",
-    "build": "tsc",
-    "start": "npm install pm2 -g && pm2 start server.js -i max",
-    "dev": "nodemon --config nodemon.json src/app.ts"
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "cp -r src/views dist/ && cp -r src/public dist/",
+    "start": "node dist/app.js",
+    "dev": "nodemon --config nodemon.json src/app.ts",
+    "render-build": "npm install && npm run build",
+    "prod": "pm2 start dist/app.js --name blogs-crud",
+    "pm2:logs": "pm2 logs",
+    "pm2:monit": "pm2 monit"
   },
   "keywords": [],
   "author": "",
@@ -21,11 +26,19 @@
     "fs-extra": "^11.1.1",
     "mongodb": "^6.16.0",
     "mongoose": "^8.14.3",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
+    "pm2": "^5.3.1",
     "typescript": "^5.8.3"
   },
   "devDependencies": {
-    "@types/express": "^4.17.6"
+    "@types/express": "^4.17.6",
+    "@types/node": "^20.11.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
