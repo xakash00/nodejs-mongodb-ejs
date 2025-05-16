@@ -10,7 +10,7 @@
     "start": "node dist/app.js",
     "dev": "nodemon app.ts",
     "render-build": "npm install && npm run build",
-    "prod": "pm2 start dist/app.js --name blogs-crud"
+     "prod": "pm2 start dist/app.js --name my-app"
   },
   "keywords": [],
   "author": "",
