@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        system: {
+                            primary: '#10B981',
+                            secondary: '#3B82F6',
+                            danger: '#EF4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-system-primary">System Information</h1>
+            <div class="text-gray-500">
+                Last updated: <%= currentTime %>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4 text-system-primary border-b pb-2">System Overview</h2>
+                <ul class="space-y-3">
+                    <li class="flex justify-between">
+                        <span class="font-medium">Hostname:</span>
+                        <span class="font-mono">
+                            <%= systemInfo.hostname %>
+                        </span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="font-medium">Platform:</span>
+                        <span class="font-mono">
+                            <%= systemInfo.platform %>
+                        </span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="font-medium">Uptime:</span>
+                        <span class="font-mono">
+                            <%= systemInfo.uptime %>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4 text-system-primary border-b pb-2">Memory Usage</h2>
+                <ul class="space-y-3">
+                    <li class="flex justify-between">
+                        <span class="font-medium">Total Memory:</span>
+                        <span class="font-mono">
+                            <%= systemInfo.memory.total %>
+                        </span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="font-medium">Used Memory:</span>
+                        <span class="font-mono">
+                            <%= systemInfo.memory.used %>
+                        </span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="font-medium">Free Memory:</span>
+                        <span class="font-mono">
+                            <%= systemInfo.memory.free %>
+                        </span>
+                    </li>
+                    <li class="flex justify-between">
+                        <span class="font-medium">Usage:</span>
+                        <span
+                            class="font-mono <%= systemInfo.memory.usage > 80 ? 'text-system-danger' : 'text-system-primary' %>">
+                            <%= systemInfo.memory.usage %>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6 md:col-span-2">
+                <h2 class="text-xl font-semibold mb-4 text-system-primary border-b pb-2">CPU Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <h3 class="font-medium mb-2">Cores</h3>
+                        <div class="font-mono text-2xl">
+                            <%= systemInfo.cpu.cores %>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-medium mb-2">Model</h3>
+                        <div class="font-mono">
+                            <%= systemInfo.cpu.model %>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-medium mb-2">Speed</h3>
+                        <div class="font-mono">
+                            <%= systemInfo.cpu.speed %>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h3 class="font-medium mb-2">Load Average (1, 5, 15 min)</h3>
+                    <div class="flex gap-4">
+                        <% systemInfo.cpu.loadavg.forEach((load, index)=> { %>
+                            <div class="flex-1">
+                                <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="h-full <%= load > systemInfo.cpu.cores ? 'bg-system-danger' : 'bg-system-primary' %>"
+                                        style="width: <%= Math.min(100, (load / systemInfo.cpu.cores) * 100) %>%"></div>
+                                </div>
+                                <div class="text-center mt-1 font-mono">
+                                    <%= load %>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+            </div>
+
+            <% if (systemInfo.network.length> 0) { %>
+                <div class="bg-white rounded-lg shadow p-6 md:col-span-2">
+                    <h2 class="text-xl font-semibold mb-4 text-system-primary border-b pb-2">Network Interfaces</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="px-4 py-2 text-left">Interface</th>
+                                    <th class="px-4 py-2 text-left">IP Address</th>
+                                    <th class="px-4 py-2 text-left">MAC Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% systemInfo.network.forEach((intf, i)=> { %>
+                                    <tr class="<%= i % 2 === 0 ? 'bg-white' : 'bg-gray-50' %>">
+                                        <td class="px-4 py-2 font-mono">
+                                            <%= intf.name %>
+                                        </td>
+                                        <td class="px-4 py-2 font-mono">
+                                            <%= intf.address %>
+                                        </td>
+                                        <td class="px-4 py-2 font-mono">
+                                            <%= intf.mac %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <% } %>
+        </div>
+
+        <div class="mt-8 text-center">
+            <a href="/"
+                class="inline-flex items-center px-4 py-2 bg-system-secondary text-white rounded hover:bg-system-primary transition">
+                ← Back to Home
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

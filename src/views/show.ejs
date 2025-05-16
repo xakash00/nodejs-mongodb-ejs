@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= blog.title %>
+    </title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .btn-primary {
+                @apply bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2 px-4 rounded-md transition-colors;
+            }
+            .btn-secondary {
+                @apply bg-white hover:bg-emerald-50 text-emerald-600 font-medium py-2 px-4 border border-emerald-300 rounded-md transition-colors;
+            }
+            .input-field {
+                @apply w-full p-3 border border-emerald-200 rounded-md focus:ring-2 focus:ring-emerald-300 focus:border-emerald-300;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-emerald-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-emerald-700">Edit Blog Post</h1>
+            <a href="/" class="text-emerald-600 hover:text-emerald-800 font-medium">
+                ← Back to Blogs
+            </a>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <form id="editForm" class="space-y-4">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-emerald-700 mb-1">Title</label>
+                    <input type="text" id="title" value="<%= blog.title %>" required class="input-field"
+                        placeholder="Blog title" />
+                </div>
+
+                <div>
+                    <label for="title" class="block text-[12px] font-medium text-emerald-700 mb-1">Author</label>
+                    <input type="text" name="author" id="author" value="<%= blog.author %>" required class="input-field"
+                        placeholder="Enter Author Name" />
+                </div>
+
+                <div>
+                    <label for="content" class="block text-sm font-medium text-emerald-700 mb-1">Content</label>
+                    <textarea id="content" required rows="8" class="input-field"
+                        placeholder="Write your content here"><%= blog.content %> <%= blog.id %></textarea>
+                    <input type="hidden" id="blogId" value="<%= blog.id %>" />
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="submit" class="btn-primary">
+                        Update Post
+                    </button>
+                    <a href="/" class="btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('editForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const author = document.getElementById('author').value;
+
+            try {
+                const response = await fetch('/edit/<%= blog.id %>', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title, content, author })
+                });
+                window.location.href = "/"
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to update blog. Please try again.');
+            }
+        });
+    </script>
+</body>
+
+</html>
