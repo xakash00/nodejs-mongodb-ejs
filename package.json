@@ -4,16 +4,13 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf coverage dist",
-    "lint": "eslint ./src/*.ts",
+    "lint": "eslint ./*.ts",
     "test": "jest",
-    "copy-assets": "cp -r src/views dist/ && cp -r src/public dist/",
-    "build": "tsc --outDir ./dist",
-    "start": "node ./dist/app.js",
-    "render-build": "npm install && npm run build && cp -r src/views dist/views && cp -r src/public dist/public",
-    "dev": "nodemon src/app.ts",
-    "prod": "pm2 start dist/app.js --name blogs-crud",
-    "pm2:logs": "pm2 logs",
-    "pm2:monit": "pm2 monit"
+    "build": "tsc && cp -r views dist/views && cp -r public dist/public",
+    "start": "node dist/app.js",
+    "dev": "nodemon app.ts",
+    "render-build": "npm install && npm run build",
+    "prod": "pm2 start dist/app.js --name blogs-crud"
   },
   "keywords": [],
   "author": "",
