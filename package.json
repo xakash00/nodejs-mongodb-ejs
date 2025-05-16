@@ -7,7 +7,7 @@
     "lint": "eslint ./src/*.ts",
     "test": "jest",
     "build": "tsc",
-    "start": "ts-node src/app.ts",
+    "start": "npm install pm2 -g && pm2 start server.js -i max",
     "dev": "nodemon --config nodemon.json src/app.ts"
   },
   "keywords": [],
