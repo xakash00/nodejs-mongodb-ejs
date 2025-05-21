@@ -16,10 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', blogRoutes);
 app.get("/system-info", getSystemInfo)
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error(err.stack);
-    res.status(500).render('fallback', { message: 'Something went wrong!' })
-});
+// app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+//     console.error(err.stack);
+//     res.status(500).render('fallback', { message: 'Something went wrong!' })
+// });
 
 
 

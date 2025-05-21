@@ -7,9 +7,9 @@ async function createBlog(event: Event, formId: string, titleId: string, content
     const contentInput = document.getElementById('content') as HTMLInputElement | null;
     const authorInput = document.getElementById('author') as HTMLInputElement | null;
 
-    const title = titleInput.value;
-    const content = contentInput.value;
-    const author = authorInput.value;
+    const title = titleInput?.value;
+    const content = contentInput?.value;
+    const author = authorInput?.value;
 
     if (!titleInput || !contentInput) {
         console.error('Form inputs not found');
